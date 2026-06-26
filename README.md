@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+upGrad E-Shop Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Project Overview
 
-## Available Scripts
+This project is a React-based E-Commerce application developed as part of the upGrad Full Stack Development Program.
 
-In the project directory, you can run:
+The application allows users to:
 
-### `npm start`
+* User Registration and Login
+* Browse Products
+* Search Products
+* Filter Products by Category
+* Sort Products
+* View Product Details
+* Add New Products
+* Modify Existing Products
+* Delete Products
+* Create Orders
+* Manage Delivery Addresses
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Technology Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* React.js
+* React Router DOM
+* Material UI (MUI)
+* Axios
+* JavaScript (ES6+)
+* HTML5
+* CSS3
 
-### `npm test`
+Project Structure
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+src/
+ ├── common/
+ │    ├── api/
+ │    ├── constants/
+ │    └── context/
+ │
+ ├── components/
+ │    ├── Header/
+ │    └── ProductCard/
+ │
+ ├── screens/
+ │    ├── Login/
+ │    ├── Signup/
+ │    ├── Products/
+ │    ├── ProductDetails/
+ │    ├── AddProduct/
+ │    ├── ModifyProduct/
+ │    └── CreateOrder/
 
-### `npm run build`
+Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Clone the repository:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+git clone <repository-url>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Install dependencies:
 
-### `npm run eject`
+npm install
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Start the application:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+npm start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Build for production:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+npm run build
 
-## Learn More
+⸻
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Backend API Notes
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The application has been integrated with the backend APIs provided for the project.
 
-### Code Splitting
+During testing, some backend endpoints may return one of the following HTTP responses depending on the backend configuration or API validation:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+* 400 Bad Request
+* 401 Unauthorized
+* 403 Forbidden
+* 500 Internal Server Error
 
-### Analyzing the Bundle Size
+The frontend implementation includes:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+* Authentication
+* Product Management
+* Product Search
+* Product Filtering
+* Product Sorting
+* Address Management
+* Order Placement Integration
 
-### Making a Progressive Web App
+If backend validation fails or the API configuration differs, order placement or certain protected operations may not complete successfully.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Durga Pavan Babu
