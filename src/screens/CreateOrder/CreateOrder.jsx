@@ -1,5 +1,9 @@
-import { useLocation } from "react-router-dom";
+import {
+    useLocation,
+    useNavigate,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
+import { createOrder } from "../../common/api/orderService";
 
 import Header from "../../components/Header/Header";
 import {
@@ -27,7 +31,14 @@ import {
 export default function CreateOrder() {
     const location = useLocation();
 
-    const { product, quantity } = location.state;
+    const navigate = useNavigate();
+    const { product, quantity } = location.state || {};
+
+    useEffect(() => {
+        if (!product) {
+            navigate("/products");
+        }
+    }, [product, navigate]);
 
     const [activeStep, setActiveStep] = useState(0);
 
@@ -44,37 +55,50 @@ export default function CreateOrder() {
         zipcode: "",
     });
 
-    useEffect(() => {
-        fetchAddresses();
-    }, []);
-const handleInputChange = (e) => {
-  const { name, value } = e.target;
+   useEffect(() => {
+    fetchAddresses();
+}, []);
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
 
-  setAddressForm((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
-};
-    const fetchAddresses = async () => {
-        try {
-            const response = await getAddresses();
-            console.log("Addresses:", response.data);
-            setAddresses(response.data);
-        } catch (error) {
-            console.log(error);
-        }
+        setAddressForm((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
+    const fetchAddresses = async () => {
+    try {
+        const response = await getAddresses();
 
+        setAddresses(response.data);
+
+        return response.data;
+
+    } catch (error) {
+
+        console.log(error);
+
+        return [];
+
+    }
+};
     const handleSaveAddress = async () => {
         try {
+
             const response = await createAddress(addressForm);
 
-            console.log("Address Created:", response.data);
+            console.log(response.data);
 
             alert("Address Added Successfully!");
 
-            fetchAddresses();
+const updatedAddresses = await fetchAddresses();
 
+if (updatedAddresses.length > 0) {
+    const latestAddress =
+        updatedAddresses[updatedAddresses.length - 1];
+
+    setSelectedAddress(String(latestAddress.id));
+}
             setAddressForm({
                 name: "",
                 contactNumber: "",
@@ -86,10 +110,45 @@ const handleInputChange = (e) => {
             });
 
         } catch (error) {
+
             console.log(error);
 
             alert("Unable to save address.");
+
         }
+    };
+
+    const handleNext = async () => {
+        if (activeStep === 1 && !selectedAddress) {
+    alert("Please select an address.");
+    return;
+}
+
+        if (activeStep < 2) {
+            setActiveStep((prev) => prev + 1);
+            return;
+        }
+
+        try {
+
+            await createOrder({
+                product: product.id,
+                quantity: quantity,
+                address: selectedAddress,
+            });
+
+            alert("Order Placed Successfully!");
+
+            navigate("/products");
+
+        } catch (error) {
+
+            console.log(error);
+
+            alert("Unable to place order.");
+
+        }
+
     };
 
     const states = [
@@ -108,19 +167,15 @@ const handleInputChange = (e) => {
         "Confirm Order",
     ];
 
-    const handleNext = () => {
-        if (activeStep < 2) {
-            setActiveStep((prev) => prev + 1);
-        } else {
-            alert("Order Placed Successfully!");
-        }
-    };
 
     const handleBack = () => {
         if (activeStep > 0) {
             setActiveStep((prev) => prev - 1);
         }
     };
+    const selectedAddressData = addresses.find(
+        (address) => String(address.id) === String(selectedAddress)
+    );
 
     return (
         <>
@@ -173,29 +228,38 @@ const handleInputChange = (e) => {
                                 >
                                     {/* Temporary Sample Address */}
 
-                                    <FormControlLabel
-                                        value="1"
-                                        control={<Radio />}
-                                        label={
-                                            <>
-                                                <Typography fontWeight="bold">
-                                                    Home
-                                                </Typography>
+                                    {addresses.map((address) => (
 
-                                                <Typography variant="body2">
-                                                    Hyderabad
-                                                </Typography>
+                                        <FormControlLabel
+                                            key={address.id}
+                                            value={address.id}
+                                            control={<Radio />}
+                                            label={
+                                                <>
+                                                    <Typography fontWeight="bold">
+                                                        {address.name}
+                                                    </Typography>
 
-                                                <Typography variant="body2">
-                                                    Telangana
-                                                </Typography>
+                                                    <Typography variant="body2">
+                                                        {address.street}
+                                                    </Typography>
 
-                                                <Typography variant="body2">
-                                                    500081
-                                                </Typography>
-                                            </>
-                                        }
-                                    />
+                                                    <Typography variant="body2">
+                                                        {address.city}
+                                                    </Typography>
+
+                                                    <Typography variant="body2">
+                                                        {address.state}
+                                                    </Typography>
+
+                                                    <Typography variant="body2">
+                                                        {address.zipcode}
+                                                    </Typography>
+                                                </>
+                                            }
+                                        />
+
+                                    ))}
 
                                     {/* Uncomment after authentication issue is fixed */}
 
@@ -328,12 +392,14 @@ const handleInputChange = (e) => {
                 {/* STEP 3 */}
 
                 {activeStep === 2 && (
+
                     <Box sx={{ mt: 5 }}>
+
                         <Typography variant="h5">
                             Confirm Order
                         </Typography>
 
-                        <Typography sx={{ mt: 2 }}>
+                        <Typography sx={{ mt: 3 }}>
                             <strong>Product:</strong> {product.name}
                         </Typography>
 
@@ -344,7 +410,41 @@ const handleInputChange = (e) => {
                         <Typography>
                             <strong>Total:</strong> ₹ {product.price * quantity}
                         </Typography>
+
+                        {selectedAddressData && (
+
+                            <Box sx={{ mt: 4 }}>
+
+                                <Typography variant="h6">
+                                    Delivery Address
+                                </Typography>
+
+                                <Typography>
+                                    {selectedAddressData.name}
+                                </Typography>
+
+                                <Typography>
+                                    {selectedAddressData.street}
+                                </Typography>
+
+                                <Typography>
+                                    {selectedAddressData.city}
+                                </Typography>
+
+                                <Typography>
+                                    {selectedAddressData.state}
+                                </Typography>
+
+                                <Typography>
+                                    {selectedAddressData.zipcode}
+                                </Typography>
+
+                            </Box>
+
+                        )}
+
                     </Box>
+
                 )}
 
                 <Box
