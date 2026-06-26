@@ -1,0 +1,9 @@
+.appBar {
+  background: #3f51b5 !important;
+}
+
+.logoBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
