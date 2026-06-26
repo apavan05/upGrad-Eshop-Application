@@ -26,9 +26,9 @@ function App() {
           element={<AddProduct />}
         />
         <Route
-  path="/products/:id/modify"
-  element={<ModifyProduct />}
-/>
+          path="/products/:id/modify"
+          element={<ModifyProduct />}
+        />
       </Routes>
     </BrowserRouter>
   );
